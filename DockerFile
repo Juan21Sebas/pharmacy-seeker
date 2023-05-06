@@ -1,0 +1,23 @@
+# Utilizar la imagen base de Go
+FROM golang:1.19-alpine
+
+# Crear un directorio de trabajo
+WORKDIR /app
+
+# Copiar los archivos necesarios para el build
+COPY go.mod go.sum ./
+
+# Descargar las dependencias del módulo
+RUN go mod download
+
+# Copiar los archivos del proyecto
+COPY . .
+
+# Compilar el proyecto
+RUN go build -o main .
+
+# Exponer el puerto en el contenedor
+EXPOSE 8080
+
+# Iniciar el servicio al iniciar el contenedor
+CMD ["./main"]

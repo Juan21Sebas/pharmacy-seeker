@@ -1,0 +1,126 @@
+# pharmacy-seeker
+
+## Description
+
+This is a script that allows to find the local of pharmacies.
+
+## Development
+
+### Usage (go ~ docker ~ docker-compose)
+
+bash
+## go executable
+$ go run cmd/main.go
+
+bash
+## Build the image
+$ docker build -t pharmacy-seeker .
+
+## Run the container with the image
+$ docker run -it pharmacy-seeker
+
+bash
+## Build the image and run the container (add '-d' for detached mode)
+$ docker-compose up --build 
+
+
+### Configs
+
+#### Configuration file format in YAML, loaded from `./internal/shared/config/config.yml` file.
+
+yaml
+server:
+  port: 8080
+
+api:
+  pharmacy:
+    url: https://farmanet.minsal.cl/index.php/ws/getLocales 
+        
+### Tools
+
+- [Go](https://go.dev/)
+- [Docker](https://www.docker.com/)
+- [Gin](https://Gin.io/)
+- [Viper](https://github.com/spf13/viper)
+- [Mock](github.com/golang/mock)
+- [Testify](github.com/stretchr/testify)
+
+### Requirements
+
+- Go 1.19
+- Docker
+- Git
+
+### Endpoints
+
+#### host: `localhost:8080`
+#### prefix: `/api/v1`
+
+- `GET /GetLocales"`
+- `GET /GetLocales/:comuna"`
+
+### Examples
+
+##### Request for pharmacy in a given `extra` and type `json`
+
+bash
+$ curl -X GET "http://localhost:8080/api/v1/GetLocales"
+$ curl -X GET "http://localhost:8080/api/v1/GetLocales/QUILLOTA"
+curl --location 'localhost:8080/GetLocales/QUILLOTA' \
+--header 'format: json' \
+--data ''
+#### type=JSON (default)
+
+response 
+{
+ "status": "success",
+  "data": [
+    {
+        "fecha": "06-05-23",
+        "local_id": "1",
+        "local_nombre": "CRUZ VERDE ",
+        "comuna_nombre": "QUILLOTA",
+        "localidad_nombre": "QUILLOTA",
+        "local_direccion": "OHIGGINS 195, LOCAL 1",
+        "funcionamiento_hora_apertura": "08:30:00",
+        "funcionamiento_hora_cierre": "18:30:00",
+        "local_telefono": "+5633332269467",
+        "local_lat": "-32.8793428949969",
+        "local_lng": "-71.2467871500868",
+        "funcionamiento_dia": "sabado",
+        "fk_region": "6",
+        "fk_comuna": "69",
+        "fk_localidad": "32"
+    },
+  ]
+}
+`
+
+--
+
+##### Request for pharmacy in a given `comuna` and type `xml`
+
+bash
+$ curl -X GET "http://localhost:8080/api/v1/GetLocales/QUILLOTA"
+
+
+#### type=XML
+response 
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <fecha>06-05-23</fecha>
+    <local_id>1</local_id>
+    <local_nombre>CRUZ VERDE </local_nombre>
+    <comuna_nombre>QUILLOTA</comuna_nombre>
+    <localidad_nombre>QUILLOTA</localidad_nombre>
+    <local_direccion>OHIGGINS 195, LOCAL 1</local_direccion>
+    <funcionamiento_hora_apertura>08:30:00</funcionamiento_hora_apertura>
+    <funcionamiento_hora_cierre>18:30:00</funcionamiento_hora_cierre>
+    <local_telefono>+5633332269467</local_telefono>
+    <local_lat>-32.8793428949969</local_lat>
+    <local_lng>-71.2467871500868</local_lng>
+    <funcionamiento_dia>sabado</funcionamiento_dia>
+    <fk_region>6</fk_region>
+    <fk_comuna>69</fk_comuna>
+    <fk_localidad>32</fk_localidad>
+</data>
